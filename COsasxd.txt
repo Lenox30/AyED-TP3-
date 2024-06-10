@@ -1,0 +1,12 @@
+algoritmo de busqueda en amplitud: vas desde un vertice inicial, identifico los vertices 
+que son adyacentes al vertice inicial, luego vamos a otro vertice e identificamos los vertices adyasentes a el y asi para todos
+
+Con cola:  
+1-empezamos con un vertice inicial(lo marcamos como identificado) y lo colocamos en una cola
+2-Visitamos ese vertice y marcamos como idenfiticado a los vertices adyasentes
+3-Visitamos el vertice adyasente de "largo 1" (numero de aristas) e identificamos su adyasesntes
+4-Luego de visitar todos los vertices de "largo 1", visitamos algun vertice identificado de "largo 2"
+5-Y asi hasta completar todo el grafo
+
+los identificados se guardan en una cola
+
