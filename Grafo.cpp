@@ -12,29 +12,43 @@ double Grafo::calcularDistancia(std::pair<int, int> a, std::pair<int, int> b) co
 }
 
 bool Grafo::hayBarrera(std::pair<int, int> a, std::pair<int, int> b) const {
-    // Implementar lógica para verificar si hay una barrera entre a y b
-    // Por simplicidad, vamos a asumir que las barreras son líneas rectas
-    // y que cualquier cruce entre los puntos a y b debe ser evitado.
-    // Esta implementación es un simplificación y puede ser mejorada según el caso de uso.
-    int minX = std::min(a.first, b.first);
-    int maxX = std::max(a.first, b.first);
-    int minY = std::min(a.second, b.second);
-    int maxY = std::max(a.second, b.second);
-
     for (const auto& barrera : barreras) {
-        if ((barrera.first >= minX && barrera.first <= maxX) &&
-            (barrera.second >= minY && barrera.second <= maxY)) {
-            return true;
+        std::pair<int, int> c = barrera;
+        std::pair<int, int> d = {barrera.first + 1, barrera.second};  // Asumiendo que las barreras son segmentos horizontales
+
+        // Vector del segmento (a, b)
+        int dx1 = b.first - a.first;
+        int dy1 = b.second - a.second;
+
+        // Vector del segmento (c, d)
+        int dx2 = d.first - c.first;
+        int dy2 = d.second - c.second;
+
+        // Vector entre (a, c)
+        int vx = c.first - a.first;
+        int vy = c.second - a.second;
+
+        double vp = dx1 * dy2 - dx2 * dy1;
+        if (vp == 0) {
+            continue;  // Segmentos paralelos
+        }
+
+        double k1 = (vx * dy2 - vy * dx2) / vp;
+        double k2 = (vx * dy1 - vy * dx1) / vp;
+
+        if (k1 >= 0 && k1 <= 1 && k2 >= 0 && k2 <= 1) {
+            return true;  // Los segmentos se intersectan
         }
     }
     return false;
 }
 
+
 void Grafo::crearGrafo() {
     int n = manchas.size();
     matriz.resize(n, std::vector<double>(n, INFINITY));
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             if (i != j && !hayBarrera(manchas[i], manchas[j])) {
                 matriz[i][j] = calcularDistancia(manchas[i], manchas[j]);
             }
