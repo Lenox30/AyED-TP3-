@@ -21,6 +21,7 @@ void Imagen::leerDesdeArchivo(const std::string& nombreArchivo) {
                 imagenBits.set(fila * TAMANO + columna);
             } else if (linea[columna] == 'X') {
                 barreras.insert({fila, columna});
+                std::cout << "barrera encontrada en: (" << fila << ", " << columna << ")\n";
             }
         }
         ++fila;
