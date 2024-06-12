@@ -8,6 +8,6 @@
 
 std::vector<int> dijkstra(const Grafo& grafo, int inicio);
 std::vector<std::pair<int, int>> prim(const Grafo& grafo);
-double busquedaAmplitud(const Grafo& grafo);
+double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino);
 
 #endif // ALGORITMOS_H

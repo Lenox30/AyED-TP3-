@@ -2,6 +2,9 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <iostream>
+#include <algorithm>
+#include <numeric>
 
 std::vector<int> dijkstra(const Grafo& grafo, int inicio) {
     const auto& matriz = grafo.getMatriz();
@@ -66,29 +69,37 @@ std::vector<std::pair<int, int>> prim(const Grafo& grafo) {
 }
 
 // encontrar el ciclo Hamiltoniano de costo mínimo
-double busquedaAmplitud(const Grafo& grafo) {
+double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) {
     const auto& matriz = grafo.getMatriz();
     int n = matriz.size();
     double min_cost = std::numeric_limits<double>::infinity();
+    std::vector<int> best_path;
 
-    // Cola para almacenar el estado de búsqueda: (nodo actual, máscara de visitados, costo actual)
-    std::queue<std::tuple<int, int, double>> q;
-    q.push({0, 1, 0.0}); // Comenzamos en el nodo 0 con la máscara que indica que solo el nodo 0 ha sido visitado
+    // Cola para almacenar el estado de búsqueda: (nodo actual, máscara de visitados, costo actual, camino actual)
+    std::queue<std::tuple<int, int, double, std::vector<int>>> q;
+    q.push({0, 1, 0.0, {0}}); // Comenzamos en el nodo 0 con la máscara que indica que solo el nodo 0 ha sido visitado
 
     while (!q.empty()) {
-        auto [u, mask, cost] = q.front();
+        auto [u, mask, cost, path] = q.front();
         q.pop();
 
         // Si todos los nodos han sido visitados, intentamos regresar al nodo inicial
         if (mask == (1 << n) - 1) {
-            min_cost = std::min(min_cost, cost + matriz[u][0]);
+            double total_cost = cost + matriz[u][0];
+            if (total_cost < min_cost) {
+                min_cost = total_cost;
+                best_path = path;
+                best_path.push_back(0);
+            }
             continue;
         }
 
         // Explorar todos los vecinos
         for (int v = 0; v < n; ++v) {
             if (!(mask & (1 << v)) && matriz[u][v] != INFINITY) {
-                q.push({v, mask | (1 << v), cost + matriz[u][v]});
+                auto new_path = path;
+                new_path.push_back(v);
+                q.push({v, mask | (1 << v), cost + matriz[u][v], new_path});
             }
         }
     }
@@ -96,6 +107,39 @@ double busquedaAmplitud(const Grafo& grafo) {
     // Verificar si no se encontró un ciclo válido
     if (min_cost == std::numeric_limits<double>::infinity()) {
         std::cout << "No se pudo encontrar un ciclo Hamiltoniano valido debido a las barreras." << std::endl;
+
+        // Buscar todos los posibles caminos que visitan todas las manchas
+        std::vector<int> nodos(n);
+        std::iota(nodos.begin(), nodos.end(), 0);
+
+        do {
+            bool valido = true;
+            double cost = 0;
+            for (int i = 0; i < n - 1; ++i) {
+                if (matriz[nodos[i]][nodos[i + 1]] == INFINITY) {
+                    valido = false;
+                    break;
+                }
+                cost += matriz[nodos[i]][nodos[i + 1]];
+            }
+            if (valido && matriz[nodos[n - 1]][nodos[0]] != INFINITY) {
+                cost += matriz[nodos[n - 1]][nodos[0]];
+                std::cout << "Posible ciclo Hamiltoniano: ";
+                for (int i = 0; i < n; ++i) {
+                    std::cout << nodos[i] << "->";
+                }
+                std::cout << nodos[0] << " con costo " << cost << std::endl;
+            }
+        } while (std::next_permutation(nodos.begin(), nodos.end()));
+    } else {
+        // Mostrar el camino del ciclo Hamiltoniano de costo mínimo
+        std::cout << "Costo minimo del ciclo Hamiltoniano: " << min_cost << std::endl;
+        std::cout << "Camino: ";
+        for (int i = 0; i < best_path.size(); ++i) {
+            std::cout << best_path[i] << (i == best_path.size() - 1 ? "" : "->");
+        }
+        std::cout << std::endl;
+        camino = best_path;
     }
 
     return min_cost;

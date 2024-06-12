@@ -39,8 +39,17 @@ int main() {
     }
     std::cout << std::endl;
 
-    double costo = busquedaAmplitud(grafo);
-    std::cout << "Costo minimo del ciclo Hamiltoniano: " << costo << std::endl;
+    std::vector<int> camino;
+    double costo = busquedaAmplitud(grafo, camino);
+
+    if (costo != std::numeric_limits<double>::infinity()) {
+        std::cout << "Costo minimo del ciclo Hamiltoniano: " << costo << std::endl;
+        std::cout << "Camino: ";
+        for (int nodo : camino) {
+            std::cout << nodo << " ";
+        }
+        std::cout << std::endl;
+    }
 
     return 0;
 }
