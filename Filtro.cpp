@@ -13,3 +13,7 @@ void Filtro::encontrarManchas() {
         }
     }
 }
+
+const std::vector<std::pair<int, int>>& Filtro::getManchas() const {
+    return manchas;
+}

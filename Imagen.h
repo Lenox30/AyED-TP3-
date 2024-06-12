@@ -6,13 +6,14 @@
 #include <string>
 #include <vector>
 
-const int TAMANO = 10;
+const int TAMANO = 20;
 
 class Imagen {
 public:
     Imagen(const std::string& nombreArchivo);
     void imprimir() const;
     bool esMancha(int fila, int columna) const;
+    const std::set<std::pair<int, int>>& getBarreras() const;  // Agregado para obtener las barreras
 
 private:
     std::bitset<TAMANO * TAMANO> imagenBits;

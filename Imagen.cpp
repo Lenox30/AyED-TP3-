@@ -54,3 +54,7 @@ bool Imagen::esMancha(int fila, int columna) const {
     }
     return true;
 }
+
+const std::set<std::pair<int, int>>& Imagen::getBarreras() const {
+    return barreras;  // Agregado para obtener las barreras
+}
