@@ -6,31 +6,71 @@
 #include <algorithm>
 #include <numeric>
 
-std::vector<int> dijkstra(const Grafo& grafo, int inicio) {
+#define INFI std::numeric_limits<double>::infinity()
+#define MAXNODOS 10
+#define MIEMBRO 1
+#define NO_MIEMBRO 0
+
+// C[i][j] Costo de la arista de i a j
+// D[i] costo del camino mínimo conocido hasta el momento de s a i
+// S[i] conjunto de nodos cuya distancia mínima a s es conocida y permanente, inicialmente S[] solo contiene a s
+// Pre[i] contiene el vértice que precede a i en el camino mínimo encontrado hasta el momento
+
+// Implementación de la función dijkstra
+std::vector<int> dijkstra(const Grafo& grafo, int s, int t, std::vector<int>& dist) {
     const auto& matriz = grafo.getMatriz();
     int n = matriz.size();
-    std::vector<double> dist(n, std::numeric_limits<double>::infinity());
+    dist.assign(n, INFINITY);
     std::vector<int> predecesor(n, -1);
-    std::priority_queue<std::pair<double, int>, std::vector<std::pair<double, int>>, std::greater<>> pq;
+    std::vector<int> visited(n, 0);
+    dist[s] = 0;
 
-    dist[inicio] = 0;
-    pq.push({0, inicio});
+    while (true) {
+        int u = -1;
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i] && (u == -1 || dist[i] < dist[u])) {
+                u = i;
+            }
+        }
 
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
+        if (u == -1 || dist[u] == INFINITY)
+            break;
+
+        visited[u] = 1;
 
         for (int v = 0; v < n; ++v) {
             if (matriz[u][v] != INFINITY && dist[u] + matriz[u][v] < dist[v]) {
                 dist[v] = dist[u] + matriz[u][v];
                 predecesor[v] = u;
-                pq.push({dist[v], v});
             }
+        }
+
+        // Imprimir las tablas D, S y Pre después de cada iteración
+        std::cout << "\n\n         D     S     Pre\n";
+        for (int i = 0; i < n; ++i) {
+            std::cout << "[" << std::setw(2) << i << "] ";
+            if (dist[i] >= 9000) {
+                std::cout << std::setw(5) << "INF";
+            } else {
+                std::cout << std::setw(5) << dist[i];
+            }
+            std::cout << std::setw(6) << visited[i];
+            std::cout << std::setw(7) << predecesor[i] << "\n";
         }
     }
 
     return predecesor;
 }
+
+void camino(const std::vector<int>& P, int s, int t) {
+    if (t == s)
+        std::cout << s << " ";
+    else {
+        camino(P, s, P[t]);
+        std::cout << t << " ";
+    }
+}
+
 
 std::vector<std::pair<int, int>> prim(const Grafo& grafo) {
     const auto& matriz = grafo.getMatriz();
