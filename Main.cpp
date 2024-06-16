@@ -20,8 +20,8 @@ int main() {
     Grafo grafo(filtro.getManchas(), imagen.getBarreras());
     grafo.imprimir();
 
-    int s = 0;  // start node
-    int t = grafo.getMatriz().size() - 1;  // end node, adjust as necessary
+    int s = 0;  // primer nodo
+    int t = grafo.getMatriz().size() - 1;  // ultimo nodo
 
     std::vector<int> dist;
     std::vector<int> predecesores = dijkstra(grafo, s, t, dist);
