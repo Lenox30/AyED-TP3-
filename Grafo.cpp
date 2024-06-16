@@ -1,6 +1,7 @@
 #include "Grafo.h"
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 Grafo::Grafo(const std::vector<std::pair<int, int>>& manchas, const std::set<std::pair<int, int>>& barreras)
         : manchas(manchas), barreras(barreras) {
@@ -59,11 +60,16 @@ void Grafo::crearGrafo() {
 void Grafo::imprimir() const {
     int n = manchas.size();
     for (int i = 0; i < n; ++i) {
+        std::cout<<"\tM"<<i;
+    }
+            std::cout<<"\n";
+    for (int i = 0; i < n; ++i) {
+        std::cout<<"M"<<i<<":\t";
         for (int j = 0; j < n; ++j) {
             if (matriz[i][j] == INFINITY) {
-                std::cout << "INF ";
+                std::cout << "INF\t";
             } else {
-                std::cout << matriz[i][j] << " ";
+                std::cout <<std::fixed << std::setprecision(2)<<matriz[i][j] << "\t";
             }
         }
         std::cout << std::endl;
