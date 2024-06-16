@@ -16,21 +16,26 @@ int main() {
 
     Filtro filtro(imagen);
     filtro.encontrarManchas();
-    filtro.getManchas();
-    imagen.getBarreras();
 
     Grafo grafo(filtro.getManchas(), imagen.getBarreras());
     grafo.imprimir();
 
-    std::vector<int> predecesores = dijkstra(grafo, 0);
-    std::vector<std::pair<int, int>> mst = prim(grafo);
+    int s = 0;  // start node
+    int t = grafo.getMatriz().size() - 1;  // end node, adjust as necessary
 
-    // Imprimir el resultado de Dijkstra
-    std::cout << "Predecesores en Dijkstra: ";
-    for (int p : predecesores) {
-        std::cout << p << " ";
+    std::vector<int> dist;
+    std::vector<int> predecesores = dijkstra(grafo, s, t, dist);
+
+    if (dist[t] != INFINITY) {
+        std::cout << "\n\nDistancia minima del nodo " << s << " al nodo " << t << " es " << dist[t];
+        std::cout << "\n\nCAMINO: ";
+        camino(predecesores, s, t);
+        std::cout << std::endl << std::endl;
+    } else {
+        std::cout << "\nNO HAY CAMINO\n";
     }
-    std::cout << std::endl;
+
+    std::vector<std::pair<int, int>> mst = prim(grafo);
 
     // Imprimir el resultado de Prim
     std::cout << "Arbol de expansion minima (Prim): ";
@@ -39,13 +44,13 @@ int main() {
     }
     std::cout << std::endl;
 
-    std::vector<int> camino;
-    double costo = busquedaAmplitud(grafo, camino);
+    std::vector<int> caminoHamiltoniano;
+    double costo = busquedaAmplitud(grafo, caminoHamiltoniano);
 
     if (costo != std::numeric_limits<double>::infinity()) {
         std::cout << "Costo minimo del ciclo Hamiltoniano: " << costo << std::endl;
         std::cout << "Camino: ";
-        for (int nodo : camino) {
+        for (int nodo : caminoHamiltoniano) {
             std::cout << nodo << " ";
         }
         std::cout << std::endl;
@@ -53,4 +58,3 @@ int main() {
 
     return 0;
 }
-
