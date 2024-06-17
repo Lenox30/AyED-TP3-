@@ -6,7 +6,7 @@
 #include <queue>
 #include <limits>
 
-std::vector<int> dijkstra(const Grafo& grafo, int inicio);
+std::vector<int> dijkstra(Grafo& , int , int , std::vector<double>& );
 std::vector<std::pair<int, int>> prim(const Grafo& grafo);
 double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino);
 

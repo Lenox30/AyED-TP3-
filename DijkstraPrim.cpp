@@ -17,7 +17,7 @@
 // Pre[i] contiene el vértice que precede a i en el camino mínimo encontrado hasta el momento
 
 // Implementación de la función dijkstra
-std::vector<int> dijkstra(const Grafo& grafo, int s, int t, std::vector<int>& dist) {
+std::vector<int> dijkstra(Grafo& grafo, int s, int t, std::vector<double>& dist) {
     const auto& matriz = grafo.getMatriz();
     int n = matriz.size();
     dist.assign(n, INFINITY);
@@ -27,6 +27,8 @@ std::vector<int> dijkstra(const Grafo& grafo, int s, int t, std::vector<int>& di
 
     while (true) {
         int u = -1;
+
+        // Seleccionar el nodo no visitado con la distancia mínima
         for (int i = 0; i < n; ++i) {
             if (!visited[i] && (u == -1 || dist[i] < dist[u])) {
                 u = i;
@@ -38,6 +40,7 @@ std::vector<int> dijkstra(const Grafo& grafo, int s, int t, std::vector<int>& di
 
         visited[u] = 1;
 
+        // Actualizar las distancias de los nodos vecinos
         for (int v = 0; v < n; ++v) {
             if (matriz[u][v] != INFINITY && dist[u] + matriz[u][v] < dist[v]) {
                 dist[v] = dist[u] + matriz[u][v];
@@ -49,7 +52,7 @@ std::vector<int> dijkstra(const Grafo& grafo, int s, int t, std::vector<int>& di
         std::cout << "\n\n         D     S     Pre\n";
         for (int i = 0; i < n; ++i) {
             std::cout << "[" << std::setw(2) << i << "] ";
-            if (dist[i] >= 9000) {
+            if (dist[i] == INFINITY) {
                 std::cout << std::setw(5) << "INF";
             } else {
                 std::cout << std::setw(5) << dist[i];
