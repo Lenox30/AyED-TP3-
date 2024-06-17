@@ -1,11 +1,6 @@
-#include "DijkstraPrim.h"
-#include <vector>
-#include <queue>
-#include <limits>
-#include <iostream>
-#include <algorithm>
-#include <numeric>
 
+
+/**
 #define INFI std::numeric_limits<double>::infinity()
 #define MAXNODOS 10
 #define MIEMBRO 1
@@ -17,13 +12,24 @@
 // Pre[i] contiene el vértice que precede a i en el camino mínimo encontrado hasta el momento
 
 // Implementación de la función dijkstra
+// Implementación de la función dijkstra
+// Implementación de la función dijkstra
+#include <vector>
+#include <iostream>
+#include <iomanip>
+
+#include <vector>
+#include <iostream>
+#include <iomanip>
+
+// Implementación de la función dijkstra
 std::vector<int> dijkstra(Grafo& grafo, int s, int t, std::vector<double>& dist) {
-    const auto& matriz = grafo.getMatriz();
-    int n = matriz.size();
-    dist.assign(n, INFINITY);
-    std::vector<int> predecesor(n, -1);
-    std::vector<int> visited(n, 0);
-    dist[s] = 0;
+    const auto& matriz = grafo.getMatriz(); // Obtener la matriz de costos del grafo
+    int n = matriz.size(); // Número de nodos en el grafo
+    dist.assign(n, INFINITY); // Inicializar distancias a infinito
+    std::vector<int> predecesor(n, -1); // Inicializar predecesores a -1
+    std::vector<int> visited(n, 0); // Inicializar todos los nodos como no visitados
+    dist[s] = 0; // La distancia al nodo fuente es 0
 
     while (true) {
         int u = -1;
@@ -35,16 +41,21 @@ std::vector<int> dijkstra(Grafo& grafo, int s, int t, std::vector<double>& dist)
             }
         }
 
-        if (u == -1 || dist[u] == INFINITY)
-            break;
+        if (u == -1 || dist[u] == INFINITY) {
+            break; // No quedan nodos no visitados o el nodo alcanzable más cercano tiene distancia infinita
+        }
 
-        visited[u] = 1;
+        visited[u] = 1; // Marcar el nodo u como visitado
 
         // Actualizar las distancias de los nodos vecinos
         for (int v = 0; v < n; ++v) {
-            if (matriz[u][v] != INFINITY && dist[u] + matriz[u][v] < dist[v]) {
-                dist[v] = dist[u] + matriz[u][v];
-                predecesor[v] = u;
+            if (matriz[u][v] != INFINITY && !visited[v]) { // Si hay una arista y el nodo no ha sido visitado
+                double newDist = dist[u] + matriz[u][v];
+                if (newDist < dist[v]) { // Si se encuentra una distancia menor
+                    dist[v] = newDist; // Actualizar la distancia mínima al nodo v
+                    predecesor[v] = u; // Establecer el predecesor de v como u
+                    std::cout << "Actualizando predecesor de " << v << " a " << u << " (distancia: " << newDist << ")\n";
+                }
             }
         }
 
@@ -62,7 +73,7 @@ std::vector<int> dijkstra(Grafo& grafo, int s, int t, std::vector<double>& dist)
         }
     }
 
-    return predecesor;
+    return predecesor; // Retornar el vector de predecesores
 }
 
 void camino(const std::vector<int>& P, int s, int t) {
@@ -73,9 +84,11 @@ void camino(const std::vector<int>& P, int s, int t) {
         std::cout << t << " ";
     }
 }
+**/
 
+#include "Hamilton.h"
 
-std::vector<std::pair<int, int>> prim(const Grafo& grafo) {
+std::vector<std::pair<int, int>> Hamilton::prim(const Grafo& grafo) {
     const auto& matriz = grafo.getMatriz();
     int n = matriz.size();
     std::vector<bool> enMST(n, false);
@@ -93,7 +106,7 @@ std::vector<std::pair<int, int>> prim(const Grafo& grafo) {
         enMST[u] = true;
 
         for (int v = 0; v < n; ++v) {
-            if (matriz[u][v] != INFINITY && !enMST[v] && matriz[u][v] < clave[v]) {
+            if (matriz[u][v] != std::numeric_limits<double>::infinity() && !enMST[v] && matriz[u][v] < clave[v]) {
                 clave[v] = matriz[u][v];
                 parent[v] = u;
                 pq.push({clave[v], v});
@@ -111,8 +124,7 @@ std::vector<std::pair<int, int>> prim(const Grafo& grafo) {
     return result;
 }
 
-// encontrar el ciclo Hamiltoniano de costo mínimo
-double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) {
+double Hamilton::busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) {
     const auto& matriz = grafo.getMatriz();
     int n = matriz.size();
     double min_cost = std::numeric_limits<double>::infinity();
@@ -128,18 +140,26 @@ double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) {
 
         // Si todos los nodos han sido visitados, intentamos regresar al nodo inicial
         if (mask == (1 << n) - 1) {
-            double total_cost = cost + matriz[u][0];
-            if (total_cost < min_cost) {
-                min_cost = total_cost;
-                best_path = path;
-                best_path.push_back(0);
+            if (matriz[u][0] != std::numeric_limits<double>::infinity()) {
+                double total_cost = cost + matriz[u][0];
+                if (total_cost < min_cost) {
+                    min_cost = total_cost;
+                    best_path = path;
+                    best_path.push_back(0);
+                }
+                // Imprimir el ciclo hamiltoniano encontrado
+                std::cout << "Ciclo Hamiltoniano encontrado: ";
+                for (int i = 0; i < path.size(); ++i) {
+                    std::cout << path[i] << "->";
+                }
+                std::cout << "0 con costo " << total_cost << std::endl;
             }
             continue;
         }
 
         // Explorar todos los vecinos
         for (int v = 0; v < n; ++v) {
-            if (!(mask & (1 << v)) && matriz[u][v] != INFINITY) {
+            if (!(mask & (1 << v)) && matriz[u][v] != std::numeric_limits<double>::infinity()) {
                 auto new_path = path;
                 new_path.push_back(v);
                 q.push({v, mask | (1 << v), cost + matriz[u][v], new_path});
@@ -159,13 +179,13 @@ double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) {
             bool valido = true;
             double cost = 0;
             for (int i = 0; i < n - 1; ++i) {
-                if (matriz[nodos[i]][nodos[i + 1]] == INFINITY) {
+                if (matriz[nodos[i]][nodos[i + 1]] == std::numeric_limits<double>::infinity()) {
                     valido = false;
                     break;
                 }
                 cost += matriz[nodos[i]][nodos[i + 1]];
             }
-            if (valido && matriz[nodos[n - 1]][nodos[0]] != INFINITY) {
+            if (valido && matriz[nodos[n - 1]][nodos[0]] != std::numeric_limits<double>::infinity()) {
                 cost += matriz[nodos[n - 1]][nodos[0]];
                 std::cout << "Posible ciclo Hamiltoniano: ";
                 for (int i = 0; i < n; ++i) {

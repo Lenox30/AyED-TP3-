@@ -2,16 +2,12 @@
 #include "Imagen.h"
 #include "Filtro.h"
 #include "Grafo.h"
-#include "DijkstraPrim.h"
-#include "Filtro.cpp"
-#include "Imagen.cpp"
-#include "Grafo.cpp"
-#include "DijkstraPrim.cpp"
+#include "Hamilton.h" // Cambiado de DijkstraPrim.h a Hamilton.h
 
 using namespace std;
 
 int main() {
-    Imagen imagen("imagen.txt");
+    Imagen imagen("C:\\Users\\Ivan\\CLionProjects\\AyED-TP3\\imagen.txt");
     imagen.imprimir();
 
     Filtro filtro(imagen);
@@ -20,10 +16,13 @@ int main() {
     Grafo grafo(filtro.getManchas(), imagen.getBarreras());
     grafo.imprimir();
 
-    int s = 0;  // primer nodo
-    int t = grafo.getMatriz().size() - 1;  // ultimo nodo
+    //int s = 0;  // primer nodo
+    //int t = grafo.getMatriz().size() - 1;  // ultimo nodo
 
-    std::vector<int> dist;
+    Hamilton hamilton;  // Crear instancia de la clase Hamilton
+
+    vector<double> dist;
+    /**
     std::vector<int> predecesores = dijkstra(grafo, s, t, dist);
 
     if (dist[t] != INFINITY) {
@@ -34,8 +33,10 @@ int main() {
     } else {
         std::cout << "\nNO HAY CAMINO\n";
     }
+    **/
 
-    std::vector<std::pair<int, int>> mst = prim(grafo);
+    // Usar el método prim de la clase Hamilton
+    std::vector<std::pair<int, int>> mst = hamilton.prim(grafo);
 
     // Imprimir el resultado de Prim
     std::cout << "Arbol de expansion minima (Prim): ";
@@ -45,8 +46,8 @@ int main() {
     std::cout << std::endl;
 
     std::vector<int> caminoHamiltoniano;
-    double costo = busquedaAmplitud(grafo, caminoHamiltoniano);
-
+    double costo = hamilton.busquedaAmplitud(grafo, caminoHamiltoniano);
+    /**
     if (costo != std::numeric_limits<double>::infinity()) {
         std::cout << "Costo minimo del ciclo Hamiltoniano: " << costo << std::endl;
         std::cout << "Camino: ";
@@ -57,4 +58,5 @@ int main() {
     }
 
     return 0;
+     **/
 }
