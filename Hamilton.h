@@ -1,6 +1,8 @@
 #ifndef HAMILTON_H
 #define HAMILTON_H
 
+#include "Cola.h"
+#include "Grafo.h"
 #include <vector>
 #include <queue>
 #include <tuple>
@@ -8,14 +10,10 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
-#include "Grafo.h"
 
 class Hamilton {
 public:
-    // Encuentra el Árbol de Expansión Mínima usando el algoritmo de Prim
     std::vector<std::pair<int, int>> prim(const Grafo& grafo);
-
-    // Encuentra el ciclo Hamiltoniano de costo mínimo usando BFS
     double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino);
 };
 
