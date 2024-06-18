@@ -1,42 +1,62 @@
 #include "Hamilton.h"
 #include "Cola.h"
-#include <unordered_set>
+#include <vector>
+#include <iostream>
+#include <iomanip>
+#include <limits>
 
+#define INFI std::numeric_limits<double>::infinity()
 
-std::vector<std::pair<int, int>> Hamilton::prim(const Grafo& grafo) {
-    const auto& matriz = grafo.getMatriz();
-    int n = matriz.size();
-    std::vector<bool> enMST(n, false);
-    std::vector<double> clave(n, std::numeric_limits<double>::infinity());
-    std::vector<int> parent(n, -1);
-    std::priority_queue<std::pair<double, int>, std::vector<std::pair<double, int>>, std::greater<>> pq;
+using namespace std;
 
-    clave[0] = 0;
-    pq.push({0, 0});
+vector<pair<int, int>> Prim(const Grafo& grafo) {
+    // Obtener la matriz de costos del grafo
+    const auto& C = grafo.getMatriz();
+    int n = C.size(); // Número de nodos en el grafo
 
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
+    // Inicialización de estructuras auxiliares
+    vector<double> mencosto(n, INFI);   // Distancia mínima a cada nodo
+    vector<int> mascerca(n, -1);        // Nodo más cercano en el MST
+    vector<bool> enMST(n, false);       // Indicador de si el nodo está en el MST
+    Cola<pair<double, int>> pq;         // Cola de prioridad para nodos a procesar
 
+    // Inicializar el nodo inicial (0)
+    mencosto[0] = 0;    // La distancia al nodo inicial es 0
+    pq.encolar({0, 0}); // Encolar el nodo inicial con costo 0
+
+    vector<pair<int, int>> Aristas; // Para almacenar las aristas del MST
+
+    // Bucle principal del algoritmo de Prim
+    while (!pq.colavacia()) {
+        // Obtener el nodo con el costo mínimo
+        int u = pq.tope().second;
+        pq.desencolar();
+
+        // Si el nodo ya está en el MST, continuar con el siguiente
+        if (enMST[u]) continue;
         enMST[u] = true;
 
+        // Agregar la arista al MST (excepto para el nodo inicial)
+        if (mascerca[u] != -1) {
+            Aristas.push_back({mascerca[u], u});
+        }
+
+        // Imprimir información del nodo más cercano
+        if (mascerca[u] != -1) {
+            cout << "\nel nodo " << u << " es el mas cercano a " << mascerca[u] << "    distancia " << mencosto[u] << endl;
+        }
+
+        // Actualizar las distancias mínimas para los nodos adyacentes
         for (int v = 0; v < n; ++v) {
-            if (matriz[u][v] != std::numeric_limits<double>::infinity() && !enMST[v] && matriz[u][v] < clave[v]) {
-                clave[v] = matriz[u][v];
-                parent[v] = u;
-                pq.push({clave[v], v});
+            if (C[u][v] != INFI && !enMST[v] && C[u][v] < mencosto[v]) {
+                mencosto[v] = C[u][v];
+                pq.encolar({mencosto[v], v}); // Encolar el nodo con su nueva distancia
+                mascerca[v] = u; // Actualizar el nodo más cercano
             }
         }
     }
 
-    std::vector<std::pair<int, int>> result;
-    for (int i = 1; i < n; ++i) {
-        if (parent[i] != -1) {
-            result.push_back({parent[i], i});
-        }
-    }
-
-    return result;
+    return Aristas; // Devolver las aristas del MST
 }
 
 double Hamilton::busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) {
