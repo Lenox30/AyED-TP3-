@@ -11,9 +11,11 @@
 #include <algorithm>
 #include <numeric>
 
+using namespace std;
+
 class Hamilton {
 public:
-    std::vector<std::pair<int, int>> prim(const Grafo& grafo);
+    vector<pair<int, int>> Prim(const Grafo& grafo);
     double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino);
 };
 
