@@ -5,8 +5,11 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <iostream>
 
-const int TAMANO = 20;
+
+const int TAMANO = 100;
 
 class Imagen {
 public:

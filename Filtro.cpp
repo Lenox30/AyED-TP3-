@@ -1,5 +1,5 @@
 #include "Filtro.h"
-#include <iostream>
+
 
 Filtro::Filtro(const Imagen& img) : imagen(img) {}
 

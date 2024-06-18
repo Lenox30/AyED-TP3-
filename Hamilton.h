@@ -3,13 +3,11 @@
 
 #include "Cola.h"
 #include "Grafo.h"
-#include <vector>
-#include <queue>
 #include <tuple>
 #include <limits>
-#include <iostream>
 #include <algorithm>
 #include <numeric>
+#include <unordered_set>
 
 class Hamilton {
 public:

@@ -5,6 +5,9 @@
 #include <cmath>
 #include <set>
 #include <utility>
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 
 class Grafo {
 public:

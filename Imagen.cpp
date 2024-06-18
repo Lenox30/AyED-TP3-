@@ -1,6 +1,4 @@
 #include "Imagen.h"
-#include <fstream>
-#include <iostream>
 
 Imagen::Imagen(const std::string& nombreArchivo) {
     leerDesdeArchivo(nombreArchivo);
@@ -21,7 +19,7 @@ void Imagen::leerDesdeArchivo(const std::string& nombreArchivo) {
                 imagenBits.set(fila * TAMANO + columna);
             } else if (linea[columna] == 'X') {
                 barreras.insert({fila, columna});
-                std::cout << "barrera encontrada en: (" << fila +1<< ", " << columna +1<< ")\n";
+                std::cout << "Barrera encontrada en: (" << fila +1<< ", " << columna +1<< ")\n";
             }
         }
         ++fila;

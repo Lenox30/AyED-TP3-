@@ -2,7 +2,6 @@
 #define FILTRO_H
 
 #include "Imagen.h"
-#include <vector>
 
 class Filtro {
 public:

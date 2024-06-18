@@ -1,7 +1,4 @@
 #include "Grafo.h"
-#include <iostream>
-#include <cmath>
-#include <iomanip>
 
 Grafo::Grafo(const std::vector<std::pair<int, int>>& manchas, const std::set<std::pair<int, int>>& barreras)
         : manchas(manchas), barreras(barreras) {
