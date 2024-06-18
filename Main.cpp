@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-    Imagen imagen("C:\\Users\\Ivan\\CLionProjects\\AyED-TP3\\imagen.txt");
+    Imagen imagen("imagen.txt");
     imagen.imprimir();
 
     Filtro filtro(imagen);
@@ -16,38 +16,27 @@ int main() {
     Grafo grafo(filtro.getManchas(), imagen.getBarreras());
     grafo.imprimir();
 
-    //int s = 0;  // primer nodo
-    //int t = grafo.getMatriz().size() - 1;  // ultimo nodo
+    Hamilton hamilton;
 
-    Hamilton hamilton;  // Crear instancia de la clase Hamilton
+    // Usar el metodo prim de la clase Hamilton
+    std::vector<std::pair<int, int>> aristas = Prim(grafo);
 
-    vector<double> dist;
-    /**
-    std::vector<int> predecesores = dijkstra(grafo, s, t, dist);
-
-    if (dist[t] != INFINITY) {
-        std::cout << "\n\nDistancia minima del nodo " << s << " al nodo " << t << " es " << dist[t];
-        std::cout << "\n\nCAMINO: ";
-        camino(predecesores, s, t);
-        std::cout << std::endl << std::endl;
-    } else {
-        std::cout << "\nNO HAY CAMINO\n";
+    cout << "----------------------------------------------\n";
+    for (const auto& arista : aristas) {
+        cout << "Arista: " << arista.first << " al: " << arista.second << endl;
     }
-    **/
-
-    // Usar el método prim de la clase Hamilton
-    std::vector<std::pair<int, int>> mst = hamilton.prim(grafo);
 
     // Imprimir el resultado de Prim
     std::cout << "Arbol de expansion minima (Prim): ";
-    for (const auto& arista : mst) {
+    for (const auto& arista : aristas) {
         std::cout << "(" << arista.first << ", " << arista.second << ") ";
     }
     std::cout << std::endl;
 
     std::vector<int> caminoHamiltoniano;
     double costo = hamilton.busquedaAmplitud(grafo, caminoHamiltoniano);
-    /**
+
+    /*
     if (costo != std::numeric_limits<double>::infinity()) {
         std::cout << "Costo minimo del ciclo Hamiltoniano: " << costo << std::endl;
         std::cout << "Camino: ";
@@ -56,7 +45,7 @@ int main() {
         }
         std::cout << std::endl;
     }
+    */
 
     return 0;
-     **/
 }
