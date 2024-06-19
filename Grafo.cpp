@@ -4,7 +4,6 @@ Grafo::Grafo(const std::vector<std::pair<int, int>>& manchas, const std::set<std
         : manchas(manchas), barreras(barreras) {
     crearGrafo();
 }
-
 double Grafo::calcularDistancia(std::pair<int, int> a, std::pair<int, int> b) const {
     return sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
 }
