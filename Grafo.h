@@ -19,8 +19,14 @@ private:
     const std::vector<std::pair<int, int>>& manchas;
     const std::set<std::pair<int, int>>& barreras;
     std::vector<std::vector<double>> matriz;
-    double calcularDistancia(std::pair<int, int> a, std::pair<int, int> b) const;
-    bool hayBarrera(std::pair<int, int> a, std::pair<int, int> b) const;
+
+    // Método para calcular la distancia Euclidiana entre dos puntos
+    double calcularDistancia(const std::pair<int, int>& a, const std::pair<int, int>& b) const;
+
+    // Método para determinar si existe una barrera entre dos puntos, también utilizando referencias.
+    bool hayBarrera(const std::pair<int, int>& a, const std::pair<int, int>& b) const;
+
+
     void crearGrafo();
 };
 
