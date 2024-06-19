@@ -8,10 +8,10 @@
 #include <algorithm>
 #include <numeric>
 #include <unordered_set>
+#include <fstream>
 
 class Hamilton {
 public:
-    std::vector<std::pair<int, int>> prim(const Grafo& grafo);
     double busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino);
 };
 

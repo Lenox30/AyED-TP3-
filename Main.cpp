@@ -2,16 +2,11 @@
 #include "Filtro.h"
 #include "Grafo.h"
 #include "Hamilton.h"
-#include "Imagen.cpp"
-#include "Filtro.cpp"
-#include "Grafo.cpp"
-#include "Hamilton.cpp"
-
 
 using namespace std;
 
 int main() {
-    Imagen imagen("imagen.txt");
+    Imagen imagen("C:\\Users\\Ivan\\CLionProjects\\AyED-TPFINAL\\imagen.txt");
     imagen.imprimir();
     std::cout << std::endl;
 
