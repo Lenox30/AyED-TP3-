@@ -17,9 +17,13 @@ double Hamilton::busquedaAmplitud(const Grafo& grafo, std::vector<int>& camino) 
         auto [u, visitados, cost, path] = q.tope();
         q.desencolar();
 
-        if (std::all_of(visitados.begin(), visitados.end(), [](bool v) { return v; })) {
+        // Si todos los nodos han sido visitados, verifica si es posible regresar al nodo inicial
+        if (std::all_of(visitados.begin(), visitados.end(), [](bool v){ return v; })) {
+            // Si hay una arista de regreso al nodo inicial
             if (matriz[u][0] != std::numeric_limits<double>::infinity()) {
+                // Calcula el costo total del ciclo hamiltoniano
                 double total_cost = cost + matriz[u][0];
+                // Imprime el ciclo hamiltoniano encontrado
                 outfile << "Ciclo Hamiltoniano encontrado: ";
                 for (int i = 0; i < path.size(); ++i) {
                     outfile << path[i] << "->";
